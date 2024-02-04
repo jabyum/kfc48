@@ -4,7 +4,7 @@ import database
 import buttons
 from telebot import types
 # создаём объект бота
-bot = telebot.TeleBot("6731412102:AAHWWPjIJVmRhlfenFRDLOufLasvNBGcoHY")
+bot = telebot.TeleBot("")
 # database.add_product("Чизбургер3", 20000.0, 0, "Лучший чизбургер2", "https://bkmenu.ru/files/2021/06/chizburger-menu-bk.png")
 print(database.get_all_products())
 print(database.get_pr_id_name())
