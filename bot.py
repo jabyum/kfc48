@@ -4,11 +4,11 @@ import database
 import buttons
 from telebot import types
 # создаём объект бота
-bot = telebot.TeleBot("")
+bot = telebot.TeleBot("6731412102:AAHWWPjIJVmRhlfenFRDLOufLasvNBGcoHY")
+# создаем временную базу
+users = {}
 # database.add_product("Чизбургер3", 20000.0, 0, "Лучший чизбургер2", "https://bkmenu.ru/files/2021/06/chizburger-menu-bk.png")
-print(database.get_all_products())
-print(database.get_pr_id_name())
-print(database.get_exact_product(3))
+
 # обработчик команды /start
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -46,6 +46,34 @@ def get_number(message, name):
     else:
         bot.send_message(user_id, "Отправьте свой номер через кнопку")
         bot.register_next_step_handler(message, get_number, name)
-# включаем бесконечную работу бота
+
+
+@bot.callback_query_handler(lambda call: call.data in ["products", "cart", "feedback"])
+def for_calls(call):
+    user_id = call.message.chat.id
+    if call.data == "products":
+        actual_product = database.get_pr_id_name()
+        bot.send_message(user_id, "Доступные бургеры", reply_markup=buttons.products_menu(actual_product))
+    elif call.data == "cart":
+        pass
+    elif call.data == "feedback":
+        bot.send_message(user_id, "Напишите ваш отзыв")
+        bot.register_next_step_handler(call.message, feedback_fc)
+
+def feedback_fc(message):
+    user_id = message.from_user.id
+    bot.send_message(-1001954411455, f"{message.text}\n"
+                                     f"Юзер пользователя: {user_id}")
+@bot.callback_query_handler(lambda call: int(call.data) in database.get_all_id())
+def calls_for_products(call):
+    user_id = call.message.chat.id
+    product = database.get_exact_product(1)
+    users[user_id] = {"pr_id": call.data, "pr_count": 1}
+
+    bot.send_photo(user_id, photo=product[3], caption=f"{product[0]}\n"
+                          f"Цена:{product[1]}\n"
+                          f"Описание: {product[2]}\n"
+                          f"Выберите количество:", reply_markup=buttons.exact_product())
+
 bot.infinity_polling()
 

@@ -67,6 +67,13 @@ def get_exact_product(pr_id):
     get_exact_prod = sql.execute("SELECT pr_name, pr_price, pr_des, pr_photo FROM products WHERE pr_id=?;",
                                  (pr_id, )).fetchone()
     return get_exact_prod
+# получение id всех продуктов
+def get_all_id():
+    connection = sqlite3.connect("kfc.db")
+    sql = connection.cursor()
+    get_all_ids = sql.execute("SELECT pr_id FROM products;").fetchall()
+    all_ids = [i[0] for i in get_all_ids]
+    return all_ids
 # очистка склада
 def delete_products():
     connection = sqlite3.connect("kfc.db")
