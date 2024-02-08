@@ -99,20 +99,20 @@ def add_to_cart(user_id, pr_id, pr_name, pr_count):
     connection = sqlite3.connect("kfc.db")
     sql = connection.cursor()
     total_price = pr_count * get_exact_product(pr_id)[1]
-    sql.execute("INSERT INTO cart (user_id, pr_id, pr_name, pr_count, total_price);",
+    sql.execute("INSERT INTO cart (user_id, pr_id, pr_name, pr_count, total_price) VALUES (?,?,?,?,?);",
                 (user_id, pr_id, pr_name, pr_count, total_price))
     connection.commit()
 # удаление определенного продукта из корзины
 def delete_exact_pr_from_cart(user_id, pr_id):
     connection = sqlite3.connect("kfc.db")
     sql = connection.cursor()
-    sql.execute("DELETE * FROM cart WHERE user_id=? AND pr_id=?;", (user_id, pr_id))
+    sql.execute("DELETE FROM cart WHERE user_id=? AND pr_id=?;", (user_id, pr_id))
     connection.commit()
 # очистка всей корзины
 def delete_user_cart(user_id):
     connection = sqlite3.connect("kfc.db")
     sql = connection.cursor()
-    sql.execute("DELETE * FROM cart WHERE user_id=?;", (user_id, ))
+    sql.execute("DELETE FROM cart WHERE user_id=?;", (user_id, ))
     connection.commit()
 # получение корзины пользователя
 def get_user_cart(user_id):

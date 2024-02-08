@@ -24,7 +24,8 @@ def main_menu():
 def products_menu(actual_products):
     kb = types.InlineKeyboardMarkup(row_width=3)
     # создаем постоянные кнопки
-    back = types.InlineKeyboardButton(text="Назад", callback_data="back")
+    back = types.InlineKeyboardButton(text="Назад", callback_data="mm")
+
     # создаем динамичиские кнопки
     all_products = [types.InlineKeyboardButton(text=product[1], callback_data=product[0])
                     for product in actual_products]
@@ -40,7 +41,7 @@ def exact_product(current_amount=1, plus_or_minus=""):
     #создаем минус
     minus = types.InlineKeyboardButton(text="➖", callback_data="minus")
     #актуальное количество
-    count = types.InlineKeyboardButton(text=f"{current_amount}", callback_data=str(current_amount))
+    count = types.InlineKeyboardButton(text=f"{current_amount}", callback_data="none")
     # подтвердить
     add_to_cart = types.InlineKeyboardButton(text="Добавить в корзину", callback_data="to_cart")
     # прописываем логику
@@ -56,3 +57,15 @@ def exact_product(current_amount=1, plus_or_minus=""):
     kb.row(back)
     return kb
 
+def get_cart_kb():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    clear = types.InlineKeyboardButton("Очистить корзину", callback_data="clear_cart")
+    order = types.InlineKeyboardButton("Оформить заказ", callback_data="order")
+    back = types.InlineKeyboardButton("Назад", callback_data="mm")
+    kb.add(clear, order, back)
+    return kb
+def get_location():
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    location = types.KeyboardButton("Отправить локацию", request_location=True)
+    kb.add(location)
+    return kb
